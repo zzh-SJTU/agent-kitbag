@@ -1,0 +1,4 @@
+interface:
+  display_name: "Claude Session Messaging"
+  short_description: "Message local independent Claude Code sessions"
+  default_prompt: "Use $claude-session-messaging to send a scoped message to a local Claude Code session and verify its reply."

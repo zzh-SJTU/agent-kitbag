@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex Agent Messaging"
+  short_description: "Quiet, lifecycle-safe Codex session messaging"
+  default_prompt: "Use $codex-agent-messaging to choose native agent coordination or a quiet independent-session request with one terminal reply."

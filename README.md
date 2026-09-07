@@ -10,9 +10,12 @@ and adapt.
 
 ```text
 agent-kitbag/
-├── configs/    Agent and tool configuration
-├── skills/     Reusable agent instructions and workflows
-└── plugins/    Plugin packages and integrations
+├── configs/           Agent and tool configuration
+├── skills/
+│   ├── claude-code/   Claude Code-only skills
+│   ├── codex/         Codex-only skills
+│   └── shared/        Skills that work with both
+└── plugins/           Plugin packages and integrations
 ```
 
 Each directory contains its own README with the expected layout and naming

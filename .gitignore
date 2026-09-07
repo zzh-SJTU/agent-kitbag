@@ -15,6 +15,10 @@ Desktop.ini
 !.env.example
 *.local
 
+# Project-local agent installations
+/.claude/
+/.codex/
+
 # Logs and temporary files
 *.log
 tmp/
