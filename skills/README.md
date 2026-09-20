@@ -18,7 +18,7 @@ Current collection:
 | --- | --- |
 | Claude Code | `codex-session-messaging` |
 | Codex | `claude-session-messaging`, `codex-agent-messaging` |
-| Shared | `karpathy-guidelines`, `show-me` |
+| Shared | `archify`, `karpathy-guidelines`, `show-me` |
 
 ## Install
 
