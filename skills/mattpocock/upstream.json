@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/mattpocock/skills",
+  "branch": "main",
+  "commit": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7",
+  "version": "1.2.3",
+  "imported_at": "2026-09-20",
+  "license": "MIT",
+  "skills": 38
+}

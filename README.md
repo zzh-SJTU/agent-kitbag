@@ -14,7 +14,8 @@ agent-kitbag/
 ├── skills/
 │   ├── claude-code/   Claude Code-only skills
 │   ├── codex/         Codex-only skills
-│   └── shared/        Skills that work with both
+│   ├── shared/        Skills that work with both
+│   └── mattpocock/    External collection kept separate
 └── plugins/           Plugin packages and integrations
 ```
 
