@@ -1,29 +1,63 @@
 ---
-name: rigorous-code-review
-description: Review pull requests and diffs with a risk-ranked rubric covering intent, correctness, performance, maintainability, validation, and goal completeness. Use for thorough code review; do not use for implementation-only work or superficial formatting checks.
+name: rigorous-code-quality
+description: Write, refactor, self-review, and review production code with context-aware standards for correctness, performance, simplicity, maintainability, testing, and goal completeness. Use for non-trivial code changes or thorough reviews; do not use for formatting-only work.
 license: MIT
 ---
 
-# Rigorous Code Review
+# Rigorous Code Quality
 
-Review the change as an engineer responsible for its production consequences.
-Follow documented repository conventions first; use this rubric where the
-repository is silent. Focus on defects and material risks, not personal taste.
+Write and assess code as an engineer responsible for its production
+consequences. Follow documented repository conventions first; use this skill
+where the repository is silent. Favor correctness and simple, coherent design
+over cleverness, speculative flexibility, or personal taste.
+
+## Modes
+
+Apply the same quality standard in three modes:
+
+- **Authoring:** implement the smallest complete solution that fits the
+  surrounding system.
+- **Refactoring and self-review:** improve structure without changing behavior,
+  then inspect the final diff for unnecessary complexity and missed risks.
+- **Code review:** evaluate a proposed change without modifying it unless the
+  user also asks for fixes.
+
+Only use severity labels and the review response format in code-review mode.
 
 ## Establish the contract
 
-Before judging the diff:
+Before writing or judging code:
 
-- Read the PR or task description and identify the promised behavior.
-- Inspect the complete diff, affected call sites, relevant tests, and nearby
-  conventions. Do not review isolated lines without their execution context.
+- Read the task, specification, or PR description and identify the promised
+  behavior and observable success criteria.
+- Inspect the relevant implementation, call sites, tests, and nearby
+  conventions. In review mode, read the complete diff rather than isolated
+  lines.
 - Explain the technical mechanism only as deeply as needed to evaluate the
   change.
 - Decide whether the change solves a real problem with proportionate
   complexity or duplicates an existing capability.
 - Distinguish requirements, repository conventions, and reviewer preferences.
 
-## Rank findings
+## Authoring workflow
+
+When changing code:
+
+1. Preserve existing behavior outside the requested scope.
+2. Implement the direct path first. Add indirection only when current
+   requirements or demonstrated reuse justify it.
+3. Validate untrusted boundaries and express internal invariants clearly.
+4. Use concrete domain types, names, units, and ownership.
+5. Add or update tests for the observable behavior and realistic failures.
+6. Run the repository's formatter, linter, type checker, tests, and relevant
+   runtime checks in proportion to the change.
+7. Review the final diff with the correctness, performance, style, and
+   completeness criteria below. Remove scaffolding that no longer serves the
+   production design.
+
+Do not broaden the requested feature merely to satisfy this skill.
+
+## Review mode: rank findings
 
 Use the narrowest applicable label:
 
@@ -77,8 +111,8 @@ branches for impossible states merely to avoid a visible failure.
 
 ## Performance
 
-Review performance in context; do not speculate without identifying a hot path
-or scaling boundary.
+Treat performance in context; do not optimize or report a regression without
+identifying a hot path or scaling boundary.
 
 - Avoid unnecessary synchronization, blocking I/O, device-to-host transfers,
   repeated serialization, N+1 operations, and avoidable allocations.
@@ -89,7 +123,7 @@ or scaling boundary.
   optimize performance.
 - Never trade correctness for an unmeasured micro-optimization.
 
-## Simplicity and maintainability
+## Code style: simplicity and maintainability
 
 Prefer the smallest design that clearly expresses the current requirement.
 
@@ -103,6 +137,9 @@ Prefer the smallest design that clearly expresses the current requirement.
   vague names and abbreviations unless they are established domain language.
 - Use real types. Do not use `Any`, dynamic attributes, casts, ignored checks,
   or immediately discarded parameters merely to silence tooling.
+- Keep control flow explicit. Prefer guard clauses for invalid input and
+  complete branches where a value or behavior must be selected; do not require
+  an `else` when an early return or invariant makes it unnecessary.
 - Keep a constant near its owner. Share it only when multiple consumers truly
   depend on one concept; do not duplicate a higher-level default downstream.
 - Match the repository's import, typing, logging, configuration, and entry-point
@@ -110,6 +147,11 @@ Prefer the smallest design that clearly expresses the current requirement.
   dependencies, hidden module side effects, and multiple competing mechanisms.
 - Prefer explicit access when the type contract is known. Reflection and
   fallback lookup need a genuine polymorphic or compatibility requirement.
+- Pass configuration through the established ownership path. Do not hide
+  environment-specific defaults, hosts, paths, or empirical values deep in
+  implementation code.
+- Keep library imports side-effect-free. Use local imports only for a real
+  dependency-cycle, startup-cost, or optional-dependency reason.
 
 Do not enforce arbitrary line-count or reuse-count thresholds. Use cohesion,
 clarity, change risk, and actual reuse as the decision criteria.
@@ -140,7 +182,7 @@ clarity, change risk, and actual reuse as the decision criteria.
 
 ## Goal completeness
 
-Compare the implementation with the stated goal:
+During implementation and review, compare the result with the stated goal:
 
 - Does every promised behavior exist and work together?
 - Are important edge cases, call sites, platforms, migrations, and operational
@@ -150,10 +192,11 @@ Compare the implementation with the stated goal:
   stated scope?
 - Did unrelated behavior change without justification?
 
-## Authorship-neutral quality review
+## Avoid cargo-cult code
 
-Do not guess whether code was generated by AI or accuse an author based on
-style. Review the observable problems themselves:
+Do not copy patterns without understanding why they fit this system. Do not
+guess whether code was generated by AI or accuse an author based on style.
+Prevent or report the observable problems themselves:
 
 - generic boilerplate that ignores repository conventions;
 - verbose comments that explain syntax but miss domain constraints;
@@ -161,12 +204,20 @@ style. Review the observable problems themselves:
 - unnecessary null checks, dynamic access, wrappers, or abstractions;
 - inconsistent naming or a textbook solution that ignores system realities.
 
-Report these under correctness or maintainability with concrete evidence. The
-source of the code is irrelevant to whether it is safe to merge.
+In authoring mode, remove these patterns. In review mode, report them under
+correctness or maintainability with concrete evidence. The source of the code
+is irrelevant to whether it is safe to merge.
 
-## Response format
+## Completion format
 
-Return:
+For implementation or refactoring, return:
+
+1. **Result** — the behavior implemented or structure improved.
+2. **Design choices** — only the non-obvious decisions and constraints.
+3. **Verification** — exact checks run and their outcomes.
+4. **Residual risk** — anything relevant that could not be verified.
+
+For code review, return:
 
 1. **Outcome** — `block`, `request changes`, or `approve`, with one sentence
    explaining the decision.

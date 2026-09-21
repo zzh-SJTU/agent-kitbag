@@ -19,7 +19,7 @@ Current collection:
 | --- | --- |
 | Claude Code | `codex-session-messaging` |
 | Codex | `claude-session-messaging`, `codex-agent-messaging` |
-| Shared | `archify`, `karpathy-guidelines`, `rigorous-code-review`, `show-me` |
+| Shared | `archify`, `karpathy-guidelines`, `rigorous-code-quality`, `show-me` |
 
 External collections stay in their own namespace and are not redistributed
 across the runtime folders:
